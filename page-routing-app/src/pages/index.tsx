@@ -1,13 +1,25 @@
 import SearchableLayout from '@/components/searchable-layout';
 import styles from './index.module.css';
 import { ReactNode } from 'react';
+import books from '@/mock/books.json';
+import BookItem from '@/components/book-item';
 
 export default function Home() {
 	return (
-		<>
-			<h1 className={styles.h1}>인덱스</h1>
-			<h2 className={styles.h2}>인덱스</h2>
-		</>
+		<div className={styles.container}>
+			<section>
+				<h3>Recommandations</h3>
+				{books.map(book => (
+					<BookItem key={book.id} {...book} />
+				))}
+			</section>
+			<section>
+				<h3>All Books</h3>
+				{books.map(book => (
+					<BookItem key={book.id} {...book} />
+				))}
+			</section>
+		</div>
 	);
 }
 
