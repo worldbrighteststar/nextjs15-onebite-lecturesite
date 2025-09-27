@@ -4,29 +4,40 @@ import { ReactNode } from 'react';
 import books from '@/mock/books.json';
 import BookItem from '@/components/book-item';
 import { InferGetServerSidePropsType } from 'next';
+import fetchBooks from '@/lib/fetch-books';
+import fetchRandomBooks from '@/lib/fetch-random-books';
 
-export const getServerSideProps = () => {
-	// executed before component, fetching data from server
-	const data = 'hello';
-	return { props: { data } };
+// executed before component, fetching data from server
+export const getServerSideProps = async () => {
+	/**
+	 * These codes run serially
+	 * const allBooks = await fetchBooks();
+	 * const randomeBooks = await fetchRandomBooks();
+	 */
+	const [allBooks, randomeBooks] = await Promise.all([
+		fetchBooks(),
+		fetchRandomBooks(),
+	]);
+
+	return { props: { allBooks, randomeBooks } };
 };
 
 export default function Home({
-	data,
+	allBooks,
+	randomeBooks,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-	console.log(data);
-
+	// console.log(allBooks);
 	return (
 		<div className={styles.container}>
 			<section>
 				<h3>Recommandations</h3>
-				{books.map(book => (
+				{randomeBooks.map(book => (
 					<BookItem key={book.id} {...book} />
 				))}
 			</section>
 			<section>
 				<h3>All Books</h3>
-				{books.map(book => (
+				{allBooks.map(book => (
 					<BookItem key={book.id} {...book} />
 				))}
 			</section>

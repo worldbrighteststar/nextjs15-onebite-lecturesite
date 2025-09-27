@@ -1,4 +1,6 @@
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import styles from './[id].module.css';
+import fetchOneBook from '@/lib/fetch-one-book';
 
 const mockData = {
 	id: 1,
@@ -12,12 +14,28 @@ const mockData = {
 		'https://shopping-phinf.pstatic.net/main_3888828/38888282618.20230913071643.jpg',
 };
 
-export default function Page() {
+export const getServerSideProps = async (
+	context: GetServerSidePropsContext,
+) => {
+	const id = context.params!.id;
+	const bookInfo = await fetchOneBook(Number(id));
+
+	return {
+		props: { bookInfo },
+	};
+};
+
+export default function Page({
+	bookInfo,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
 	// const router = useRouter();
 	// const { id } = router.query;
+	if (!bookInfo) {
+		return 'Error : the book info does not exist in a DB';
+	}
 
 	const { id, title, subTitle, description, author, publisher, coverImgUrl } =
-		mockData;
+		bookInfo;
 
 	return (
 		<div className={styles.container}>

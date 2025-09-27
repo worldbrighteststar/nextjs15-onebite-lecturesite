@@ -13,7 +13,7 @@ const compat = new FlatCompat({
 const eslintConfig = [
 	...compat.extends('next/core-web-vitals'),
 	{
-		files: ['**/*.js', '**/*.jsx', '**/*.tsx'],
+		files: ['**/*.js', '**/*.jsx', '**/*.tsx', '**/*.ts'],
 		plugins: { prettier: prettierPlugin },
 		rules: {
 			'no-undef': 'error',

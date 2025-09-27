@@ -3,15 +3,26 @@ import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 import books from '@/mock/books.json';
 import BookItem from '@/components/book-item';
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
+import fetchBooks from '@/lib/fetch-books';
 
-export default function Page() {
-	const router = useRouter();
+export const getServerSideProps = async (
+	context: GetServerSidePropsContext,
+) => {
+	const q = context.query.q;
+	const searchedBooks = await fetchBooks(q as string);
+	return { props: { searchedBooks } };
+};
 
-	const { q } = router.query;
+export default function Page({
+	searchedBooks,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+	// const router = useRouter();
+	// const { q } = router.query;
 
 	return (
 		<div>
-			{books.map(book => (
+			{searchedBooks.map(book => (
 				<BookItem key={book.id} {...book} />
 			))}
 		</div>
