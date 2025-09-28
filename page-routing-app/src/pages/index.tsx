@@ -6,6 +6,7 @@ import BookItem from '@/components/book-item';
 import { InferGetServerSidePropsType, InferGetStaticPropsType } from 'next';
 import fetchBooks from '@/lib/fetch-books';
 import fetchRandomBooks from '@/lib/fetch-random-books';
+import Head from 'next/head';
 
 // SSR : executed before component, fetching data from server
 // export const getServerSideProps = async () => {
@@ -31,17 +32,26 @@ export default function Home({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
 	// console.log(allBooks);
 	return (
-		<div className={styles.container}>
-			<section>
-				<h3>Recommandations</h3>
-				{randomeBooks &&
-					randomeBooks.map(book => <BookItem key={book.id} {...book} />)}
-			</section>
-			<section>
-				<h3>All Books</h3>
-				{allBooks && allBooks.map(book => <BookItem key={book.id} {...book} />)}
-			</section>
-		</div>
+		<>
+			<Head>
+				<title>OneBite Book</title>
+				<meta property="og:image" content="/thumbnail.png" />
+				<meta property="og:title" content="onebitebooks" />
+				<meta property="og:description" content="meet books in onebitebooks" />
+			</Head>
+			<div className={styles.container}>
+				<section>
+					<h3>Recommandations</h3>
+					{randomeBooks &&
+						randomeBooks.map(book => <BookItem key={book.id} {...book} />)}
+				</section>
+				<section>
+					<h3>All Books</h3>
+					{allBooks &&
+						allBooks.map(book => <BookItem key={book.id} {...book} />)}
+				</section>
+			</div>
+		</>
 	);
 }
 

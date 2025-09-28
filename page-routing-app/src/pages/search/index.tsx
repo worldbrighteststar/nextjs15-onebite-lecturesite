@@ -6,6 +6,7 @@ import BookItem from '@/components/book-item';
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next';
 import fetchBooks from '@/lib/fetch-books';
 import { BookData } from '@/types';
+import Head from 'next/head';
 
 // export const getServerSideProps = async (
 // 	context: GetServerSidePropsContext,
@@ -37,6 +38,12 @@ export default function Page() {
 
 	return (
 		<div>
+			<Head>
+				<title>OneBite Book - Search Result</title>
+				<meta property="og:image" content="/thumbnail.png" />
+				<meta property="og:title" content="onebitebooks - search results" />
+				<meta property="og:description" content="meet books in onebitebooks" />
+			</Head>
 			{searchedBooks.map(book => (
 				<BookItem key={book.id} {...book} />
 			))}

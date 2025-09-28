@@ -8,6 +8,7 @@ import styles from './[id].module.css';
 import fetchOneBook from '@/lib/fetch-one-book';
 import { useRouter } from 'next/router';
 import { notFound } from 'next/navigation';
+import Head from 'next/head';
 
 // const mockData = {
 // 	id: 1,
@@ -56,7 +57,22 @@ export default function Page({
 	bookInfo,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
 	const router = useRouter();
-	if (router.isFallback) return 'Loading...';
+	if (router.isFallback) {
+		return (
+			<>
+				<Head>
+					<title>OneBite Book - Search Result</title>
+					<meta property="og:image" content="/thumbnail.png" />
+					<meta property="og:title" content="onebitebooks - search results" />
+					<meta
+						property="og:description"
+						content="meet books in onebitebooks"
+					/>
+				</Head>
+				<div>Loadting ...</div>
+			</>
+		);
+	}
 	// if (!bookInfo) {
 	// 	return 'Error : the book info does not exist in a DB';
 	// }
@@ -65,19 +81,27 @@ export default function Page({
 		bookInfo;
 
 	return (
-		<div className={styles.container}>
-			<div
-				className={styles.cover_img_container}
-				style={{ backgroundImage: `url('${coverImgUrl}')` }}
-			>
-				<img src={coverImgUrl} />
+		<>
+			<Head>
+				<title>{title}</title>
+				<meta property="og:image" content={coverImgUrl} />
+				<meta property="og:title" content={title} />
+				<meta property="og:description" content={description} />
+			</Head>
+			<div className={styles.container}>
+				<div
+					className={styles.cover_img_container}
+					style={{ backgroundImage: `url('${coverImgUrl}')` }}
+				>
+					<img src={coverImgUrl} />
+				</div>
+				<div className={styles.title}>{title}</div>
+				<div className={styles.subTitle}>{subTitle}</div>
+				<div className={styles.author}>
+					{author} | {publisher}
+				</div>
+				<div className={styles.description}>{description}</div>
 			</div>
-			<div className={styles.title}>{title}</div>
-			<div className={styles.subTitle}>{subTitle}</div>
-			<div className={styles.author}>
-				{author} | {publisher}
-			</div>
-			<div className={styles.description}>{description}</div>
-		</div>
+		</>
 	);
 }
