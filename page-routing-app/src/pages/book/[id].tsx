@@ -23,12 +23,12 @@ import { notFound } from 'next/navigation';
 
 export const getStaticPaths = () => {
 	return {
-		path: [
+		paths: [
 			{ params: { id: '1' } },
 			{ params: { id: '2' } },
 			{ params: { id: '3' } },
 		],
-		fallback: 'true',
+		fallback: true,
 		/**
 		 * false : 404
 		 * blocking : SSR

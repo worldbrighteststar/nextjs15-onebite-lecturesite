@@ -22,7 +22,7 @@ export const getStaticProps = async () => {
 		fetchRandomBooks(),
 	]);
 
-	return { props: { allBooks, randomeBooks } };
+	return { props: { allBooks, randomeBooks }, revalidate: 10 }; // original ISR > revalidate : x(sec)
 };
 
 export default function Home({
