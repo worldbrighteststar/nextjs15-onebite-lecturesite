@@ -3,12 +3,15 @@ import styles from './index.module.css';
 import { ReactNode } from 'react';
 import books from '@/mock/books.json';
 import BookItem from '@/components/book-item';
-import { InferGetServerSidePropsType } from 'next';
+import { InferGetServerSidePropsType, InferGetStaticPropsType } from 'next';
 import fetchBooks from '@/lib/fetch-books';
 import fetchRandomBooks from '@/lib/fetch-random-books';
 
-// executed before component, fetching data from server
-export const getServerSideProps = async () => {
+// SSR : executed before component, fetching data from server
+// export const getServerSideProps = async () => {
+
+// SSG : executed during build time
+export const getStaticProps = async () => {
 	/**
 	 * These codes run serially
 	 * const allBooks = await fetchBooks();
@@ -25,21 +28,18 @@ export const getServerSideProps = async () => {
 export default function Home({
 	allBooks,
 	randomeBooks,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+}: InferGetStaticPropsType<typeof getStaticProps>) {
 	// console.log(allBooks);
 	return (
 		<div className={styles.container}>
 			<section>
 				<h3>Recommandations</h3>
-				{randomeBooks.map(book => (
-					<BookItem key={book.id} {...book} />
-				))}
+				{randomeBooks &&
+					randomeBooks.map(book => <BookItem key={book.id} {...book} />)}
 			</section>
 			<section>
 				<h3>All Books</h3>
-				{allBooks.map(book => (
-					<BookItem key={book.id} {...book} />
-				))}
+				{allBooks && allBooks.map(book => <BookItem key={book.id} {...book} />)}
 			</section>
 		</div>
 	);
